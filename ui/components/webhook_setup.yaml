@@ -1,0 +1,5 @@
+component_id: whatsapp_webhook_setup
+type: callback_setup
+title: "Incoming messages (webhook)"
+callback_id: updates
+status_action_id: get_webhook_status

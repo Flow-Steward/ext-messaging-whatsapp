@@ -1,0 +1,4 @@
+component_id: contacts_intro
+type: markdown
+title: Contacts
+content: "A **contact** is one person (a phone number, digits only with the country code, for example `37060000000`) saved as a stable, named Flow Steward destination. **Notify** lets Flow Steward write to the contact. **Workflow trigger** lets the contact's incoming messages start workflows; it is off by default.\n\nEveryone who writes to this number shows up under **Discovered senders**; save one to turn it into a contact. Groups are not supported."

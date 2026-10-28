@@ -1,0 +1,9 @@
+page_id: setup
+title: Setup
+description: "Save the access token, app secret and phone number ID from Meta, then connect the webhook for incoming messages."
+components:
+  - ref: "../components/secrets_form.yaml"
+  - ref: "../components/config_form.yaml"
+  - ref: "../components/webhook_setup.yaml"
+  - ref: "../components/quick_start.yaml"
+  - ref: "../components/setup_guide.yaml"

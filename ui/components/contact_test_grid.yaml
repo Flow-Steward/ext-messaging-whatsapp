@@ -1,0 +1,31 @@
+component_id: contact_test_grid
+anchor_id: contact_test_grid
+type: grid
+title: "Test a contact"
+query_id: list_contacts
+columns:
+  - key: display_name
+    label: Contact
+    type: text
+  - key: channel_id
+    label: "Contact ID"
+    type: text
+    monospace: true
+  - key: enabled
+    label: Enabled
+    type: text
+  - key: capabilities.notify
+    label: Notify
+    type: text
+row_actions:
+  - action_id: test_delivery
+    label: "Send test"
+    scope: row
+    visible_if:
+      - path: enabled
+        eq: true
+      - path: capabilities.notify
+        eq: true
+empty_state:
+  title: "No contacts to test"
+  description: "Save and enable a contact with Notify before sending a test. A test is refused outside the 24-hour window."

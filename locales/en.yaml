@@ -1,0 +1,274 @@
+ext.display_name: WhatsApp
+ext.description: "Sends WhatsApp messages, templates, reactions and files through the WhatsApp Business Cloud API and starts workflows from incoming messages and delivery statuses."
+ext.account_scope_description: "WhatsApp binding is per-project; each project configures its phone number ID, access token and named contacts."
+category.notification.display_name: Notifications
+connection.whatsapp_cloud.display_name: "WhatsApp Business"
+connection.whatsapp_cloud.description: "A project-scoped WhatsApp Business Cloud API phone number with named contacts for notifications and workflow triggers."
+op.send_message.display_name: "Send WhatsApp message"
+op.send_message.description: "Send a text message to one of this connection's WhatsApp contacts, optionally with up to 3 reply buttons. Text is at most 4096 characters, at most 1024 with buttons; a longer text is refused, never cut. Outside the 24-hour window WhatsApp refuses it: use Send template."
+op.send_message.input.connection_ref.display_name: connection_ref
+op.send_message.input.channel_id.display_name: "Contact ID"
+op.send_message.input.channel_id.description: "The ID of a contact on the Contacts page. May be left empty when only one contact is enabled for notifications."
+op.send_message.input.wa_id.display_name: "Phone number"
+op.send_message.input.wa_id.description: "Alternative to the contact ID: the phone number (digits only) of a saved contact, for example the wa_id of a New WhatsApp message trigger."
+op.send_message.input.text.display_name: Message
+op.send_message.input.text.description: "The text to send, at most 4096 characters (1024 with buttons). A Template step's result fits here."
+op.send_message.input.preview_url.display_name: "Link preview"
+op.send_message.input.preview_url.description: "Show a preview of the first URL (it must start with http:// or https://)."
+op.send_message.input.reply_to_message_id.display_name: "Reply to message ID"
+op.send_message.input.reply_to_message_id.description: "Send as a reply to this WhatsApp message ID (a wamid). Leave empty for a normal message."
+op.send_message.input.buttons.display_name: Buttons
+op.send_message.input.buttons.description: "Up to 3 reply buttons: a list of {\"id\": \"yes\", \"title\": \"Yes\"}. A title is at most 20 characters and unique; an id is at most 256 characters and unique. With buttons the message is interactive and its text is at most 1024 characters."
+op.send_message.output.delivered.display_name: Delivered
+op.send_message.output.delivered.description: "Whether WhatsApp accepted the message. Accepted is not delivered: delivery arrives as a message status."
+op.send_message.output.provider_message_id.display_name: "WhatsApp message ID"
+op.send_message.output.provider_message_id.description: "The message ID (wamid) WhatsApp returned."
+op.send_message.output.channel_id.display_name: "Contact ID"
+op.send_message.output.channel_id.description: "The contact the message went to."
+op.send_message.output.external_effect_status.display_name: external_effect_status
+op.deliver_notification.display_name: "Deliver Notification"
+op.deliver_notification.description: "Internal notification-provider delivery contract."
+op.deliver_notification.input.event.display_name: event
+op.deliver_notification.input.route.display_name: route
+op.deliver_notification.output.delivered.display_name: delivered
+op.deliver_notification.output.provider_message_id.display_name: provider_message_id
+op.send_template.display_name: "Send WhatsApp template"
+op.send_template.description: "Send an approved message template to one of this connection's WhatsApp contacts. Templates are the only messages WhatsApp allows outside the 24-hour window. Only positional body text parameters are supported."
+op.send_template.input.connection_ref.display_name: connection_ref
+op.send_template.input.channel_id.display_name: "Contact ID"
+op.send_template.input.channel_id.description: "The ID of a contact on the Contacts page. May be left empty when only one contact is enabled for notifications."
+op.send_template.input.wa_id.display_name: "Phone number"
+op.send_template.input.wa_id.description: "Alternative to the contact ID: the phone number (digits only) of a saved contact, for example the wa_id of a New WhatsApp message trigger."
+op.send_template.input.template_name.display_name: "Template name"
+op.send_template.input.template_name.description: "The name of an APPROVED message template."
+op.send_template.input.language.display_name: "Language code"
+op.send_template.input.language.description: "The template's language code, for example en_US or lt."
+op.send_template.input.body_parameters.display_name: "Body parameters"
+op.send_template.input.body_parameters.description: "The texts for the template body placeholders in order, for example [\"Jessica\", \"12\"]."
+op.send_template.output.delivered.display_name: Delivered
+op.send_template.output.delivered.description: "Whether WhatsApp accepted the message. Accepted is not delivered: delivery arrives as a message status."
+op.send_template.output.provider_message_id.display_name: "WhatsApp message ID"
+op.send_template.output.provider_message_id.description: "The message ID (wamid) WhatsApp returned."
+op.send_template.output.channel_id.display_name: "Contact ID"
+op.send_template.output.channel_id.description: "The contact the message went to."
+op.send_template.output.external_effect_status.display_name: external_effect_status
+op.send_reaction.display_name: "Send WhatsApp reaction"
+op.send_reaction.description: "React with an emoji to a message a contact sent you. The message must be at most 30 days old and must be one you received."
+op.send_reaction.input.connection_ref.display_name: connection_ref
+op.send_reaction.input.channel_id.display_name: "Contact ID"
+op.send_reaction.input.channel_id.description: "The ID of a contact on the Contacts page. May be left empty when only one contact is enabled for notifications."
+op.send_reaction.input.wa_id.display_name: "Phone number"
+op.send_reaction.input.wa_id.description: "Alternative to the contact ID: the phone number (digits only) of a saved contact, for example the wa_id of a New WhatsApp message trigger."
+op.send_reaction.input.message_id.display_name: "Message ID"
+op.send_reaction.input.message_id.description: "The ID (wamid) of the received message to react to, for example message_id of a New WhatsApp message trigger."
+op.send_reaction.input.emoji.display_name: Emoji
+op.send_reaction.input.emoji.description: "The emoji to react with."
+op.send_reaction.output.delivered.display_name: Delivered
+op.send_reaction.output.delivered.description: "Whether WhatsApp accepted the message. Accepted is not delivered: delivery arrives as a message status."
+op.send_reaction.output.provider_message_id.display_name: "WhatsApp message ID"
+op.send_reaction.output.provider_message_id.description: "The message ID (wamid) WhatsApp returned."
+op.send_reaction.output.channel_id.display_name: "Contact ID"
+op.send_reaction.output.channel_id.description: "The contact the message went to."
+op.send_reaction.output.external_effect_status.display_name: external_effect_status
+op.mark_as_read.display_name: "Mark WhatsApp message as read"
+op.mark_as_read.description: "Mark a received message as read (the sender sees blue ticks). Works within 30 days of receipt; it also marks earlier messages of the chat as read."
+op.mark_as_read.input.connection_ref.display_name: connection_ref
+op.mark_as_read.input.message_id.display_name: "Message ID"
+op.mark_as_read.input.message_id.description: "The ID (wamid) of the received message, for example message_id of a New WhatsApp message trigger."
+op.mark_as_read.output.marked_read.display_name: "Marked as read"
+op.mark_as_read.output.marked_read.description: "Whether WhatsApp confirmed the read mark."
+op.mark_as_read.output.message_id.display_name: "Message ID"
+op.mark_as_read.output.message_id.description: "The message that was marked."
+op.mark_as_read.output.external_effect_status.display_name: external_effect_status
+op.send_file.display_name: "Send WhatsApp file"
+op.send_file.description: "Send a file from the workflow to one of this connection's WhatsApp contacts as an image, document, audio or video. Limits: image 5 MB (jpeg, png), document 100 MB (txt, xls, xlsx, doc, docx, ppt, pptx, pdf), audio 16 MB, video 16 MB (3gp, mp4). A larger file is refused, never cut."
+op.send_file.input.connection_ref.display_name: connection_ref
+op.send_file.input.channel_id.display_name: "Contact ID"
+op.send_file.input.channel_id.description: "The ID of a contact on the Contacts page. May be left empty when only one contact is enabled for notifications."
+op.send_file.input.wa_id.display_name: "Phone number"
+op.send_file.input.wa_id.description: "Alternative to the contact ID: the phone number (digits only) of a saved contact, for example the wa_id of a New WhatsApp message trigger."
+op.send_file.input.kind.display_name: Kind
+op.send_file.input.kind.description: "How WhatsApp shows the file: image, document, audio or video."
+op.send_file.input.artifact_handle.display_name: File
+op.send_file.input.artifact_handle.description: "The file (an artifact) to send, for example one a Fetch File or Get WhatsApp file step produced."
+op.send_file.input.caption.display_name: Caption
+op.send_file.input.caption.description: "Optional text under an image, video or document, at most 1024 characters. Audio has no caption."
+op.send_file.input.file_name.display_name: "File name"
+op.send_file.input.file_name.description: "The name WhatsApp shows for a document. Defaults to the artifact's name; include the extension."
+op.send_file.input.mime_type.display_name: "MIME type"
+op.send_file.input.mime_type.description: "Override the file's MIME type, for example application/pdf. Defaults to the artifact's type or its file extension."
+op.send_file.input.reply_to_message_id.display_name: "Reply to message ID"
+op.send_file.input.reply_to_message_id.description: "Send as a reply to this WhatsApp message ID (a wamid)."
+op.send_file.output.delivered.display_name: Delivered
+op.send_file.output.delivered.description: "Whether WhatsApp accepted the message. Accepted is not delivered: delivery arrives as a message status."
+op.send_file.output.provider_message_id.display_name: "WhatsApp message ID"
+op.send_file.output.provider_message_id.description: "The message ID (wamid) WhatsApp returned."
+op.send_file.output.channel_id.display_name: "Contact ID"
+op.send_file.output.channel_id.description: "The contact the message went to."
+op.send_file.output.external_effect_status.display_name: external_effect_status
+op.get_file.display_name: "Get WhatsApp file"
+op.get_file.description: "Download a received file, by its WhatsApp media ID, into a workflow artifact. The download link lives 5 minutes and media IDs from webhooks are kept 7 days, so run the step soon after the message arrives. A file over 100 MB is refused, never cut."
+op.get_file.input.connection_ref.display_name: connection_ref
+op.get_file.input.file_id.display_name: "Media ID"
+op.get_file.input.file_id.description: "The file_id of a New WhatsApp message trigger (the WhatsApp media ID)."
+op.get_file.input.file_name.display_name: "File name"
+op.get_file.input.file_name.description: "Optional name for the artifact. Defaults to whatsapp_<media id> with an extension from the file type."
+op.get_file.output.artifact_handle.display_name: File
+op.get_file.output.artifact_handle.description: "The downloaded file as a workflow artifact."
+op.get_file.output.artifact_filename.display_name: "File name"
+op.get_file.output.artifact_filename.description: "The name given to the file."
+op.get_file.output.mime_type.display_name: "MIME type"
+op.get_file.output.mime_type.description: "The file's MIME type."
+op.get_file.output.size_bytes.display_name: "Size in bytes"
+op.get_file.output.size_bytes.description: "The size of the downloaded file."
+op.get_file.output.sha256.display_name: SHA-256
+op.get_file.output.sha256.description: "The checksum of the downloaded file."
+step.send_message.section: "Send WhatsApp message"
+step.send_message.field.channel_id.label: "Contact ID"
+step.send_message.field.channel_id.help_text: "The ID of a contact on the Contacts page. May be left empty when only one contact is enabled for notifications."
+step.send_message.field.channel_id.placeholder: alerts
+step.send_message.field.wa_id.label: "Phone number"
+step.send_message.field.wa_id.help_text: "Alternative to the contact ID: the phone number (digits only) of a saved contact, for example the wa_id of a New WhatsApp message trigger."
+step.send_message.field.wa_id.placeholder: "37060000000"
+step.send_message.field.text.label: Message
+step.send_message.field.text.help_text: "The text to send, at most 4096 characters (1024 with buttons). A Template step's result fits here."
+step.send_message.field.preview_url.label: "Link preview"
+step.send_message.field.preview_url.help_text: "Show a preview of the first URL (it must start with http:// or https://)."
+step.send_message.field.reply_to_message_id.label: "Reply to message ID"
+step.send_message.field.reply_to_message_id.help_text: "Send as a reply to this WhatsApp message ID (a wamid). Leave empty for a normal message."
+step.send_message.field.buttons.label: Buttons
+step.send_message.field.buttons.help_text: "Up to 3 reply buttons: a list of {\"id\": \"yes\", \"title\": \"Yes\"}. A title is at most 20 characters and unique; an id is at most 256 characters and unique. With buttons the message is interactive and its text is at most 1024 characters."
+step.send_template.section: "Send WhatsApp template"
+step.send_template.field.channel_id.label: "Contact ID"
+step.send_template.field.channel_id.help_text: "The ID of a contact on the Contacts page. May be left empty when only one contact is enabled for notifications."
+step.send_template.field.channel_id.placeholder: alerts
+step.send_template.field.wa_id.label: "Phone number"
+step.send_template.field.wa_id.help_text: "Alternative to the contact ID: the phone number (digits only) of a saved contact, for example the wa_id of a New WhatsApp message trigger."
+step.send_template.field.wa_id.placeholder: "37060000000"
+step.send_template.field.template_name.label: "Template name"
+step.send_template.field.template_name.help_text: "The name of an APPROVED message template."
+step.send_template.field.language.label: "Language code"
+step.send_template.field.language.help_text: "The template's language code, for example en_US or lt."
+step.send_template.field.body_parameters.label: "Body parameters"
+step.send_template.field.body_parameters.help_text: "The texts for the template body placeholders in order, for example [\"Jessica\", \"12\"]."
+step.send_reaction.section: "Send WhatsApp reaction"
+step.send_reaction.field.channel_id.label: "Contact ID"
+step.send_reaction.field.channel_id.help_text: "The ID of a contact on the Contacts page. May be left empty when only one contact is enabled for notifications."
+step.send_reaction.field.channel_id.placeholder: alerts
+step.send_reaction.field.wa_id.label: "Phone number"
+step.send_reaction.field.wa_id.help_text: "Alternative to the contact ID: the phone number (digits only) of a saved contact, for example the wa_id of a New WhatsApp message trigger."
+step.send_reaction.field.wa_id.placeholder: "37060000000"
+step.send_reaction.field.message_id.label: "Message ID"
+step.send_reaction.field.message_id.help_text: "The ID (wamid) of the received message to react to, for example message_id of a New WhatsApp message trigger."
+step.send_reaction.field.emoji.label: Emoji
+step.send_reaction.field.emoji.help_text: "The emoji to react with."
+step.mark_as_read.section: "Mark WhatsApp message as read"
+step.mark_as_read.field.message_id.label: "Message ID"
+step.mark_as_read.field.message_id.help_text: "The ID (wamid) of the received message, for example message_id of a New WhatsApp message trigger."
+step.send_file.section: "Send WhatsApp file"
+step.send_file.field.channel_id.label: "Contact ID"
+step.send_file.field.channel_id.help_text: "The ID of a contact on the Contacts page. May be left empty when only one contact is enabled for notifications."
+step.send_file.field.channel_id.placeholder: alerts
+step.send_file.field.wa_id.label: "Phone number"
+step.send_file.field.wa_id.help_text: "Alternative to the contact ID: the phone number (digits only) of a saved contact, for example the wa_id of a New WhatsApp message trigger."
+step.send_file.field.wa_id.placeholder: "37060000000"
+step.send_file.field.kind.label: Kind
+step.send_file.field.kind.help_text: "How WhatsApp shows the file: image, document, audio or video."
+step.send_file.field.artifact_handle.label: File
+step.send_file.field.artifact_handle.help_text: "The file (an artifact) to send, for example one a Fetch File or Get WhatsApp file step produced."
+step.send_file.field.caption.label: Caption
+step.send_file.field.caption.help_text: "Optional text under an image, video or document, at most 1024 characters. Audio has no caption."
+step.send_file.field.file_name.label: "File name"
+step.send_file.field.file_name.help_text: "The name WhatsApp shows for a document. Defaults to the artifact's name; include the extension."
+step.send_file.field.mime_type.label: "MIME type"
+step.send_file.field.mime_type.help_text: "Override the file's MIME type, for example application/pdf. Defaults to the artifact's type or its file extension."
+step.send_file.field.reply_to_message_id.label: "Reply to message ID"
+step.send_file.field.reply_to_message_id.help_text: "Send as a reply to this WhatsApp message ID (a wamid)."
+step.get_file.section: "Get WhatsApp file"
+step.get_file.field.file_id.label: "Media ID"
+step.get_file.field.file_id.help_text: "The file_id of a New WhatsApp message trigger (the WhatsApp media ID)."
+step.get_file.field.file_name.label: "File name"
+step.get_file.field.file_name.help_text: "Optional name for the artifact. Defaults to whatsapp_<media id> with an extension from the file type."
+page.overview.title: Overview
+page.overview.description: "Is WhatsApp ready for this project? Read-only; each incomplete item points at the page that fixes it."
+page.setup.title: Setup
+page.setup.description: "Save the access token, app secret and phone number ID from Meta, then connect the webhook for incoming messages."
+page.contacts.title: Contacts
+page.contacts.description: "The people this number may write to, and who may start workflows. Senders that wrote to you appear here to be saved."
+page.deliveries.title: Deliveries
+page.deliveries.description: "Delivery summary and history, with retry for failed or skipped rows."
+component.health_panel.title: Readiness
+component.delivery_stats.title: "Delivery summary"
+component.whatsapp_overview.title: About
+component.whatsapp_overview.content: "Sends project messages to WhatsApp through the WhatsApp Business Cloud API: text, templates, reactions and files, and notifications for job failures and completions. Incoming messages from contacts you allow can start workflows. Each project binds its own phone number, access token and named contacts.\n\nWhatsApp only allows free-form messages within 24 hours after the person last wrote to you; outside that window use a template. Start on **Setup**, then **Contacts**."
+component.secrets_form.title: "Access token and app secret"
+component.secrets_form.description: "Required: the access token. The app secret is needed only for incoming messages. Both are treated like passwords, encrypted at rest, and never displayed after save."
+component.secrets_form.field.access_token.label: "Access token"
+component.secrets_form.field.access_token.help: "System user access token with the whatsapp_business_messaging permission. Encrypted at rest and never displayed after save. Leave the field empty to keep the stored token; enter a new one to replace it."
+component.secrets_form.field.access_token.placeholder: EAAG...
+component.secrets_form.field.app_secret.label: "App secret"
+component.secrets_form.field.app_secret.help: "The Meta app's secret. Needed only for incoming messages: Flow Steward uses it to check that each webhook really comes from Meta. Leave empty to keep the stored value."
+component.secrets_form.section.secrets.title: "Access token and app secret"
+component.secrets_form.save_label: "Save secrets"
+component.secrets_form.action.verify.label: Verify
+component.config_form.title: "Phone number"
+component.config_form.description: "Required: the phone number ID messages are sent from."
+component.config_form.field.phone_number_id.label: "Phone number ID"
+component.config_form.field.phone_number_id.help: "The ID of the WhatsApp Business phone number (not the number itself) from the Meta app dashboard, WhatsApp > API setup."
+component.config_form.field.phone_number_id.placeholder: "106540352242922"
+component.config_form.field.waba_id.label: "WhatsApp Business Account ID"
+component.config_form.field.waba_id.help: Optional.
+component.config_form.field.graph_api_version.label: "Graph API version"
+component.config_form.field.graph_api_version.help: "The Graph API version used for every call. Defaults to v26.0."
+component.config_form.field.graph_api_version.placeholder: v26.0
+component.config_form.section.general.title: "Phone number"
+component.config_form.save_label: "Save phone number"
+component.whatsapp_webhook_setup.title: "Incoming messages (webhook)"
+component.quick_start.title: Checklist
+component.quick_start.content: "1. In [Meta for Developers](https://developers.facebook.com/) create an app with the **WhatsApp** product and note the **Phone number ID** (WhatsApp > API setup).\n2. In Meta Business Settings create a **system user**, give it the app and the `whatsapp_business_messaging` permission, and generate an **access token**. Paste it into the card above.\n3. Copy the app's **App secret** (App settings > Basic) into the same card. It is needed only for incoming messages.\n4. Save the phone number ID, then press **Verify**.\n5. For incoming messages: copy the **callback URL** and the **verify token** shown in the webhook card into the Meta dashboard (WhatsApp > Configuration > Webhook), then subscribe to the **messages** field. Meta must be able to reach the URL over public HTTPS.\n6. Open **Contacts** and add the people this number may write to. Contacts that wrote to you appear there automatically.\n\nMeta's guide: [WhatsApp Business Cloud API](https://developers.facebook.com/documentation/business-messaging/whatsapp)."
+component.setup_guide.title: "Detailed guide"
+component.setup_guide.content: "## The 24-hour window\n\nWhen someone writes to your number a 24-hour window opens and resets with every new message from them. Inside it you may send any message type. Outside it WhatsApp refuses free-form messages (error 131047) and only an approved **template** goes through. You may message only people who opted in.\n\n## Incoming messages and webhook\n\nWhatsApp has no polling: messages arrive only by webhook, so the callback URL must be reachable from the internet over HTTPS. A local installation cannot receive messages. Meta checks the URL with the verify token and then signs every delivery with the app secret; Flow Steward rejects anything that does not verify. Meta retries failed deliveries for days; duplicates are ignored.\n\n## Who may start workflows\n\nA message starts a workflow only when the sender is a saved contact with **Workflow trigger** switched on. Everyone else is only listed under discovered senders.\n\n## What is not supported\n\nEditing, deleting or pinning sent messages (WhatsApp has none), groups, approvals through buttons, and template header or button parameters.\n\n## Permissions and token revocation\n\nThe system user token needs the whatsapp_business_messaging permission. If it may have leaked, revoke it in Meta Business Settings, generate a new one and save it. An empty field never overwrites the stored token."
+component.contacts_intro.title: Contacts
+component.contacts_intro.content: "A **contact** is one person (a phone number, digits only with the country code, for example `37060000000`) saved as a stable, named Flow Steward destination. **Notify** lets Flow Steward write to the contact. **Workflow trigger** lets the contact's incoming messages start workflows; it is off by default.\n\nEveryone who writes to this number shows up under **Discovered senders**; save one to turn it into a contact. Groups are not supported."
+component.contacts_form.title: Contacts
+component.contacts_form.field.contacts.label: "WhatsApp contacts"
+component.contacts_form.field.contacts.help: "Add people by phone number. Notify allows messages to them; Workflow trigger lets their messages start workflows (off by default)."
+component.contacts_form.field.contacts.field.channel_id.label: "Contact ID"
+component.contacts_form.field.contacts.field.channel_id.placeholder: alerts
+component.contacts_form.field.contacts.field.display_name.label: "Display name"
+component.contacts_form.field.contacts.field.display_name.placeholder: "Ops on call"
+component.contacts_form.field.contacts.field.wa_id.label: "Phone number"
+component.contacts_form.field.contacts.field.wa_id.placeholder: "37060000000"
+component.contacts_form.field.contacts.field.enabled.label: Enabled
+component.contacts_form.field.contacts.field.capabilities.notify.label: Notify
+component.contacts_form.field.contacts.field.capabilities.workflow_trigger.label: "Workflow trigger"
+component.contacts_form.section.contacts.title: Contacts
+component.contacts_form.save_label: "Save contacts"
+component.discovered_senders_grid.title: "Discovered senders"
+component.discovered_senders_grid.column.profile_name.label: "Profile name"
+component.discovered_senders_grid.column.wa_id.label: "Phone number"
+component.discovered_senders_grid.column.last_message_type.label: "Last message"
+component.discovered_senders_grid.column.existing_channel_id.label: "Saved contact"
+component.discovered_senders_grid.column.last_seen_at.label: "Last seen"
+component.discovered_senders_grid.row_action.save_discovered_sender.label: "Save as contact"
+component.discovered_senders_grid.empty_state: "No senders yet"
+component.discovered_senders_grid.empty_state_description: "Senders appear here after they write to this number. Incoming messages need the webhook set up on the Setup page."
+component.contact_test_grid.title: "Test a contact"
+component.contact_test_grid.column.display_name.label: Contact
+component.contact_test_grid.column.channel_id.label: "Contact ID"
+component.contact_test_grid.column.enabled.label: Enabled
+component.contact_test_grid.column.capabilities.notify.label: Notify
+component.contact_test_grid.row_action.test_delivery.label: "Send test"
+component.contact_test_grid.empty_state: "No contacts to test"
+component.contact_test_grid.empty_state_description: "Save and enable a contact with Notify before sending a test. A test is refused outside the 24-hour window."
+component.delivery_grid.title: "Delivery History"
+component.delivery_grid.column.workflow_label.label: Workflow
+component.delivery_grid.column.event_label.label: Event
+component.delivery_grid.column.severity.label: Severity
+component.delivery_grid.column.status.label: Status
+component.delivery_grid.column.delivered_at.label: "Delivered At"
+component.delivery_grid.column.provider_message_id.label: "Message ID"
+component.delivery_grid.column.error_text.label: Error
+component.delivery_grid.row_action.retry_delivery.label: Retry
+component.delivery_grid.empty_state: "No deliveries yet"
+component.delivery_grid.empty_state_description: "Deliveries will appear here once notifications are dispatched."

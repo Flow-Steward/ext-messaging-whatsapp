@@ -1,0 +1,4 @@
+component_id: whatsapp_overview
+type: markdown
+title: About
+content: "Sends project messages to WhatsApp through the WhatsApp Business Cloud API: text, templates, reactions and files, and notifications for job failures and completions. Incoming messages from contacts you allow can start workflows. Each project binds its own phone number, access token and named contacts.\n\nWhatsApp only allows free-form messages within 24 hours after the person last wrote to you; outside that window use a template. Start on **Setup**, then **Contacts**."

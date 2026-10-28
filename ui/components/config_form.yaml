@@ -1,0 +1,46 @@
+component_id: config_form
+type: form
+title: "Phone number"
+description: "Required: the phone number ID messages are sent from."
+schema_ref: "../../schemas/config.schema.yaml"
+ui_schema:
+  version: "1"
+  type: form_ui
+  layout:
+    columns: 1
+  sections:
+    - section_id: general
+      title: "Phone number"
+      variant: card
+      field_ids:
+        - phone_number_id
+        - waba_id
+        - graph_api_version
+  fields:
+    - field_id: phone_number_id
+      path: phone_number_id
+      widget: text
+      label: "Phone number ID"
+      placeholder: "106540352242922"
+      required: true
+      help: "The ID of the WhatsApp Business phone number (not the number itself) from the Meta app dashboard, WhatsApp > API setup."
+      section_id: general
+    - field_id: waba_id
+      path: waba_id
+      widget: text
+      label: "WhatsApp Business Account ID"
+      help: Optional.
+      section_id: general
+    - field_id: graph_api_version
+      path: graph_api_version
+      widget: text
+      label: "Graph API version"
+      placeholder: v26.0
+      help: "The Graph API version used for every call. Defaults to v26.0."
+      section_id: general
+  actions:
+    save_label: "Save phone number"
+data:
+  load_query: get_config
+  save_action: save_config
+  save_mode: patch

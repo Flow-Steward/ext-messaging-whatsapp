@@ -1,0 +1,66 @@
+component_id: contacts_form
+anchor_id: contacts_form
+type: form
+title: Contacts
+ui_schema:
+  version: "1"
+  type: form_ui
+  layout:
+    columns: 1
+  sections:
+    - section_id: contacts
+      title: Contacts
+      variant: card
+      field_ids:
+        - contacts
+  fields:
+    - field_id: contacts
+      path: contacts
+      widget: repeater
+      label: "WhatsApp contacts"
+      help: "Add people by phone number. Notify allows messages to them; Workflow trigger lets their messages start workflows (off by default)."
+      props:
+        fields:
+          - field_id: channel_id
+            path: channel_id
+            widget: text
+            label: "Contact ID"
+            placeholder: alerts
+            required: true
+            props:
+              immutable_on_edit: true
+              unique_in_list: true
+          - field_id: display_name
+            path: display_name
+            widget: text
+            label: "Display name"
+            placeholder: "Ops on call"
+            required: true
+          - field_id: wa_id
+            path: wa_id
+            widget: text
+            label: "Phone number"
+            placeholder: "37060000000"
+            required: true
+          - field_id: enabled
+            path: enabled
+            widget: boolean
+            label: Enabled
+            default: true
+          - field_id: notify
+            path: capabilities.notify
+            widget: boolean
+            label: Notify
+            default: true
+          - field_id: workflow_trigger
+            path: capabilities.workflow_trigger
+            widget: boolean
+            label: "Workflow trigger"
+            default: false
+      section_id: contacts
+  actions:
+    save_label: "Save contacts"
+data:
+  load_query: list_contacts
+  save_action: upsert_contact
+  save_mode: replace

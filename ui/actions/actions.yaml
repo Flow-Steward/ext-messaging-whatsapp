@@ -1,0 +1,806 @@
+actions:
+  - action_id: send_message
+    workflow_visible: true
+    title: "Send WhatsApp message"
+    description: "Send a text message to one of this connection's WhatsApp contacts, optionally with up to 3 reply buttons. Text is at most 4096 characters, at most 1024 with buttons; a longer text is refused, never cut. Outside the 24-hour window WhatsApp refuses it: use Send template."
+    required_scopes:
+      - "extension:invoke"
+    handler:
+      mode: extension
+    mutates_platform: false
+    parameters:
+      - name: channel_id
+        type: string
+        required: false
+        description: "The ID of a contact on the Contacts page. May be left empty when only one contact is enabled for notifications."
+      - name: wa_id
+        type: string
+        required: false
+        description: "Alternative to the contact ID: the phone number (digits only) of a saved contact, for example the wa_id of a New WhatsApp message trigger."
+      - name: text
+        type: string
+        required: true
+        description: "The text to send, at most 4096 characters (1024 with buttons). A Template step's result fits here."
+      - name: preview_url
+        type: boolean
+        required: false
+        description: "Show a preview of the first URL (it must start with http:// or https://)."
+      - name: reply_to_message_id
+        type: string
+        required: false
+        description: "Send as a reply to this WhatsApp message ID (a wamid). Leave empty for a normal message."
+      - name: buttons
+        type: array
+        required: false
+        description: "Up to 3 reply buttons: a list of {\"id\": \"yes\", \"title\": \"Yes\"}. A title is at most 20 characters and unique; an id is at most 256 characters and unique. With buttons the message is interactive and its text is at most 1024 characters."
+    result_fields:
+      - delivered
+      - provider_message_id
+      - channel_id
+    error_codes:
+      - text_required
+      - message_too_long
+      - message_too_long_for_buttons
+      - buttons_invalid
+      - project_connection_required
+      - no_notify_contact
+      - channel_id_required
+      - unknown_channel_id
+      - unknown_wa_id
+      - wa_id_invalid
+      - channel_disabled
+      - channel_missing_notify
+      - contact_wa_id_missing
+      - access_token_required
+      - phone_number_id_required
+      - whatsapp_window_closed
+      - whatsapp_parameter_invalid
+      - whatsapp_parameter_missing
+      - whatsapp_media_rejected
+      - whatsapp_token_invalid
+      - whatsapp_rate_limited
+      - whatsapp_undeliverable
+      - whatsapp_recipient_is_sender
+      - whatsapp_number_not_registered
+      - whatsapp_template_invalid
+      - whatsapp_account_restricted
+      - whatsapp_payment_issue
+      - whatsapp_service_unavailable
+      - whatsapp_unsupported_message_type
+      - whatsapp_media_download_failed
+      - whatsapp_request_failed
+      - whatsapp_request_rejected
+      - whatsapp_send_ambiguous
+  - action_id: send_template
+    workflow_visible: true
+    title: "Send WhatsApp template"
+    description: "Send an approved message template to one of this connection's WhatsApp contacts. Templates are the only messages WhatsApp allows outside the 24-hour window. Only positional body text parameters are supported."
+    required_scopes:
+      - "extension:invoke"
+    handler:
+      mode: extension
+    mutates_platform: false
+    parameters:
+      - name: channel_id
+        type: string
+        required: false
+        description: "The ID of a contact on the Contacts page. May be left empty when only one contact is enabled for notifications."
+      - name: wa_id
+        type: string
+        required: false
+        description: "Alternative to the contact ID: the phone number (digits only) of a saved contact, for example the wa_id of a New WhatsApp message trigger."
+      - name: template_name
+        type: string
+        required: true
+        description: "The name of an APPROVED message template."
+      - name: language
+        type: string
+        required: true
+        description: "The template's language code, for example en_US or lt."
+      - name: body_parameters
+        type: array
+        required: false
+        description: "The texts for the template body placeholders in order, for example [\"Jessica\", \"12\"]."
+    result_fields:
+      - delivered
+      - provider_message_id
+      - channel_id
+    error_codes:
+      - template_name_required
+      - language_required
+      - template_parameters_invalid
+      - project_connection_required
+      - no_notify_contact
+      - channel_id_required
+      - unknown_channel_id
+      - unknown_wa_id
+      - wa_id_invalid
+      - channel_disabled
+      - channel_missing_notify
+      - contact_wa_id_missing
+      - access_token_required
+      - phone_number_id_required
+      - whatsapp_window_closed
+      - whatsapp_parameter_invalid
+      - whatsapp_parameter_missing
+      - whatsapp_media_rejected
+      - whatsapp_token_invalid
+      - whatsapp_rate_limited
+      - whatsapp_undeliverable
+      - whatsapp_recipient_is_sender
+      - whatsapp_number_not_registered
+      - whatsapp_template_invalid
+      - whatsapp_account_restricted
+      - whatsapp_payment_issue
+      - whatsapp_service_unavailable
+      - whatsapp_unsupported_message_type
+      - whatsapp_media_download_failed
+      - whatsapp_request_failed
+      - whatsapp_request_rejected
+      - whatsapp_send_ambiguous
+  - action_id: send_reaction
+    workflow_visible: true
+    title: "Send WhatsApp reaction"
+    description: "React with an emoji to a message a contact sent you. The message must be at most 30 days old and must be one you received."
+    required_scopes:
+      - "extension:invoke"
+    handler:
+      mode: extension
+    mutates_platform: false
+    parameters:
+      - name: channel_id
+        type: string
+        required: false
+        description: "The ID of a contact on the Contacts page. May be left empty when only one contact is enabled for notifications."
+      - name: wa_id
+        type: string
+        required: false
+        description: "Alternative to the contact ID: the phone number (digits only) of a saved contact, for example the wa_id of a New WhatsApp message trigger."
+      - name: message_id
+        type: string
+        required: true
+        description: "The ID (wamid) of the received message to react to, for example message_id of a New WhatsApp message trigger."
+      - name: emoji
+        type: string
+        required: true
+        description: "The emoji to react with."
+    result_fields:
+      - delivered
+      - provider_message_id
+      - channel_id
+    error_codes:
+      - message_id_required
+      - emoji_required
+      - project_connection_required
+      - no_notify_contact
+      - channel_id_required
+      - unknown_channel_id
+      - unknown_wa_id
+      - wa_id_invalid
+      - channel_disabled
+      - channel_missing_notify
+      - contact_wa_id_missing
+      - access_token_required
+      - phone_number_id_required
+      - whatsapp_window_closed
+      - whatsapp_parameter_invalid
+      - whatsapp_parameter_missing
+      - whatsapp_media_rejected
+      - whatsapp_token_invalid
+      - whatsapp_rate_limited
+      - whatsapp_undeliverable
+      - whatsapp_recipient_is_sender
+      - whatsapp_number_not_registered
+      - whatsapp_template_invalid
+      - whatsapp_account_restricted
+      - whatsapp_payment_issue
+      - whatsapp_service_unavailable
+      - whatsapp_unsupported_message_type
+      - whatsapp_media_download_failed
+      - whatsapp_request_failed
+      - whatsapp_request_rejected
+      - whatsapp_send_ambiguous
+  - action_id: mark_as_read
+    workflow_visible: true
+    title: "Mark WhatsApp message as read"
+    description: "Mark a received message as read (the sender sees blue ticks). Works within 30 days of receipt; it also marks earlier messages of the chat as read."
+    required_scopes:
+      - "extension:invoke"
+    handler:
+      mode: extension
+    mutates_platform: false
+    parameters:
+      - name: message_id
+        type: string
+        required: true
+        description: "The ID (wamid) of the received message, for example message_id of a New WhatsApp message trigger."
+    result_fields:
+      - marked_read
+      - message_id
+    error_codes:
+      - message_id_required
+      - project_connection_required
+      - access_token_required
+      - phone_number_id_required
+      - whatsapp_window_closed
+      - whatsapp_parameter_invalid
+      - whatsapp_parameter_missing
+      - whatsapp_media_rejected
+      - whatsapp_token_invalid
+      - whatsapp_rate_limited
+      - whatsapp_undeliverable
+      - whatsapp_recipient_is_sender
+      - whatsapp_number_not_registered
+      - whatsapp_template_invalid
+      - whatsapp_account_restricted
+      - whatsapp_payment_issue
+      - whatsapp_service_unavailable
+      - whatsapp_unsupported_message_type
+      - whatsapp_media_download_failed
+      - whatsapp_request_failed
+      - whatsapp_request_rejected
+      - whatsapp_send_ambiguous
+  - action_id: send_file
+    workflow_visible: true
+    title: "Send WhatsApp file"
+    description: "Send a file from the workflow to one of this connection's WhatsApp contacts as an image, document, audio or video. Limits: image 5 MB (jpeg, png), document 100 MB (txt, xls, xlsx, doc, docx, ppt, pptx, pdf), audio 16 MB, video 16 MB (3gp, mp4). A larger file is refused, never cut."
+    required_scopes:
+      - "extension:invoke"
+    handler:
+      mode: extension
+    mutates_platform: false
+    parameters:
+      - name: channel_id
+        type: string
+        required: false
+        description: "The ID of a contact on the Contacts page. May be left empty when only one contact is enabled for notifications."
+      - name: wa_id
+        type: string
+        required: false
+        description: "Alternative to the contact ID: the phone number (digits only) of a saved contact, for example the wa_id of a New WhatsApp message trigger."
+      - name: kind
+        type: string
+        required: true
+        description: "How WhatsApp shows the file: image, document, audio or video."
+      - name: artifact_handle
+        type: string
+        required: true
+        description: "The file (an artifact) to send, for example one a Fetch File or Get WhatsApp file step produced."
+      - name: caption
+        type: string
+        required: false
+        description: "Optional text under an image, video or document, at most 1024 characters. Audio has no caption."
+      - name: file_name
+        type: string
+        required: false
+        description: "The name WhatsApp shows for a document. Defaults to the artifact's name; include the extension."
+      - name: mime_type
+        type: string
+        required: false
+        description: "Override the file's MIME type, for example application/pdf. Defaults to the artifact's type or its file extension."
+      - name: reply_to_message_id
+        type: string
+        required: false
+        description: "Send as a reply to this WhatsApp message ID (a wamid)."
+    result_fields:
+      - delivered
+      - provider_message_id
+      - channel_id
+    error_codes:
+      - kind_invalid
+      - artifact_required
+      - caption_too_long
+      - caption_not_supported
+      - file_too_large
+      - artifact_read_failed
+      - artifact_empty
+      - mime_type_unsupported
+      - project_connection_required
+      - no_notify_contact
+      - channel_id_required
+      - unknown_channel_id
+      - unknown_wa_id
+      - wa_id_invalid
+      - channel_disabled
+      - channel_missing_notify
+      - contact_wa_id_missing
+      - access_token_required
+      - phone_number_id_required
+      - whatsapp_window_closed
+      - whatsapp_parameter_invalid
+      - whatsapp_parameter_missing
+      - whatsapp_media_rejected
+      - whatsapp_token_invalid
+      - whatsapp_rate_limited
+      - whatsapp_undeliverable
+      - whatsapp_recipient_is_sender
+      - whatsapp_number_not_registered
+      - whatsapp_template_invalid
+      - whatsapp_account_restricted
+      - whatsapp_payment_issue
+      - whatsapp_service_unavailable
+      - whatsapp_unsupported_message_type
+      - whatsapp_media_download_failed
+      - whatsapp_request_failed
+      - whatsapp_request_rejected
+      - whatsapp_send_ambiguous
+  - action_id: get_file
+    workflow_visible: true
+    title: "Get WhatsApp file"
+    description: "Download a received file, by its WhatsApp media ID, into a workflow artifact. The download link lives 5 minutes and media IDs from webhooks are kept 7 days, so run the step soon after the message arrives. A file over 100 MB is refused, never cut."
+    required_scopes:
+      - "extension:invoke"
+      - "artifact:write"
+    handler:
+      mode: extension
+    mutates_platform: false
+    parameters:
+      - name: file_id
+        type: string
+        required: true
+        description: "The file_id of a New WhatsApp message trigger (the WhatsApp media ID)."
+      - name: file_name
+        type: string
+        required: false
+        description: "Optional name for the artifact. Defaults to whatsapp_<media id> with an extension from the file type."
+    result_fields:
+      - artifact_handle
+      - artifact_filename
+      - mime_type
+      - size_bytes
+      - sha256
+    error_codes:
+      - file_id_required
+      - project_connection_required
+      - access_token_required
+      - file_too_large
+      - artifact_write_failed
+      - whatsapp_media_not_found
+      - whatsapp_media_url_rejected
+      - whatsapp_download_failed
+      - whatsapp_token_invalid
+      - whatsapp_rate_limited
+      - whatsapp_request_failed
+      - whatsapp_request_rejected
+      - whatsapp_send_ambiguous
+  - action_id: deliver_notification
+    workflow_visible: false
+    title: "Deliver Notification"
+    description: "Send a routed project notification through WhatsApp."
+    required_scopes:
+      - "notify:dispatch"
+    handler:
+      mode: extension
+      config:
+        runtime_resources:
+          project_connection: true
+          provider_key: flowsteward.whatsapp
+          provider_secrets:
+            - access_token
+        host_mutations:
+          - project_connection_upsert
+        pre_dispatch_host_mutations:
+          - project_connection_upsert
+    mutates_platform: true
+    command_type: invoke_extension_action
+    parameters:
+      - name: event
+        type: object
+        required: true
+      - name: route
+        type: object
+        required: true
+    result_fields:
+      - delivered
+      - provider_message_id
+    error_codes:
+      - project_connection_required
+      - channel_id_required
+      - unknown_channel_id
+      - unknown_wa_id
+      - wa_id_invalid
+      - channel_disabled
+      - channel_missing_notify
+      - contact_wa_id_missing
+      - access_token_required
+      - phone_number_id_required
+      - whatsapp_window_closed
+      - whatsapp_parameter_invalid
+      - whatsapp_parameter_missing
+      - whatsapp_media_rejected
+      - whatsapp_token_invalid
+      - whatsapp_rate_limited
+      - whatsapp_undeliverable
+      - whatsapp_recipient_is_sender
+      - whatsapp_number_not_registered
+      - whatsapp_template_invalid
+      - whatsapp_account_restricted
+      - whatsapp_payment_issue
+      - whatsapp_service_unavailable
+      - whatsapp_unsupported_message_type
+      - whatsapp_media_download_failed
+      - whatsapp_request_failed
+      - whatsapp_request_rejected
+      - whatsapp_send_ambiguous
+  - action_id: retry_delivery
+    workflow_visible: false
+    title: "Retry Delivery"
+    description: "Re-attempt a failed notification delivery."
+    required_scopes:
+      - "notify:dispatch"
+    handler:
+      mode: extension
+      config:
+        runtime_resources:
+          project_connection: true
+          provider_key: flowsteward.whatsapp
+          provider_secrets:
+            - access_token
+          notification_deliveries: true
+        host_mutations:
+          - notification_delivery_log
+    command_type: invoke_extension_action
+    mutates_platform: true
+    result_fields:
+      - message
+      - result.delivered
+      - result.provider_message_id
+    error_codes:
+      - project_context_required
+      - invalid_payload
+      - delivery_retry_unavailable
+      - delivery_not_found
+      - delivery_not_retryable
+      - access_token_required
+      - phone_number_id_required
+      - whatsapp_window_closed
+      - whatsapp_parameter_invalid
+      - whatsapp_parameter_missing
+      - whatsapp_media_rejected
+      - whatsapp_token_invalid
+      - whatsapp_rate_limited
+      - whatsapp_undeliverable
+      - whatsapp_recipient_is_sender
+      - whatsapp_number_not_registered
+      - whatsapp_template_invalid
+      - whatsapp_account_restricted
+      - whatsapp_payment_issue
+      - whatsapp_service_unavailable
+      - whatsapp_unsupported_message_type
+      - whatsapp_media_download_failed
+      - whatsapp_request_failed
+      - whatsapp_request_rejected
+      - whatsapp_send_ambiguous
+  - action_id: test_delivery
+    workflow_visible: false
+    title: "Test Delivery"
+    description: "Send a test notification to verify configuration. Outside the 24-hour window WhatsApp refuses it."
+    required_scopes:
+      - "notify:dispatch"
+    handler:
+      mode: extension
+      config:
+        runtime_resources:
+          project_connection: true
+          provider_key: flowsteward.whatsapp
+          provider_secrets:
+            - access_token
+    mutates_platform: false
+    parameters:
+      - name: channel_id
+        type: string
+        required: true
+        description: "Configured contact id selected from the contact test grid."
+    result_fields:
+      - message
+      - result.delivered
+      - result.provider_message_id
+    error_codes:
+      - project_context_required
+      - contact_required
+      - unknown_channel_id
+      - unknown_wa_id
+      - wa_id_invalid
+      - channel_disabled
+      - channel_missing_notify
+      - contact_wa_id_missing
+      - access_token_required
+      - phone_number_id_required
+      - whatsapp_window_closed
+      - whatsapp_parameter_invalid
+      - whatsapp_parameter_missing
+      - whatsapp_media_rejected
+      - whatsapp_token_invalid
+      - whatsapp_rate_limited
+      - whatsapp_undeliverable
+      - whatsapp_recipient_is_sender
+      - whatsapp_number_not_registered
+      - whatsapp_template_invalid
+      - whatsapp_account_restricted
+      - whatsapp_payment_issue
+      - whatsapp_service_unavailable
+      - whatsapp_unsupported_message_type
+      - whatsapp_media_download_failed
+      - whatsapp_request_failed
+      - whatsapp_request_rejected
+      - whatsapp_send_ambiguous
+  - action_id: save_config
+    workflow_visible: false
+    title: "Save Configuration"
+    description: "Persist connection settings (phone number ID, WABA ID, Graph API version)."
+    required_scopes:
+      - "extension:invoke"
+    handler:
+      mode: platform
+      operation: project_connection_config_patch
+      config:
+        connection_type_id: whatsapp_cloud
+        fields:
+          - phone_number_id
+          - waba_id
+          - graph_api_version
+    mutates_platform: false
+    parameters:
+      - name: phone_number_id
+        type: string
+        required: false
+      - name: waba_id
+        type: string
+        required: false
+      - name: graph_api_version
+        type: string
+        required: false
+    result_fields:
+      - message
+      - values.phone_number_id
+      - values.waba_id
+      - values.graph_api_version
+    error_codes:
+      - invalid_payload
+      - project_context_required
+      - project_connection_storage_unavailable
+  - action_id: save_secrets
+    workflow_visible: false
+    title: "Save Secrets"
+    description: "Persist provider secret values."
+    required_scopes:
+      - "extension:invoke"
+    handler:
+      mode: platform
+      operation: project_connection_secrets_save
+      config:
+        provider_key: flowsteward.whatsapp
+        connection_type_id: whatsapp_cloud
+        secret_fields:
+          - input: access_token
+            secret_key: access_token
+          - input: app_secret
+            secret_key: app_secret
+    mutates_platform: false
+    parameters:
+      - name: access_token
+        type: string
+        required: false
+        description: "System user access token to store for the selected project."
+      - name: app_secret
+        type: string
+        required: false
+        description: "Meta app secret, used to verify inbound webhooks."
+    result_fields:
+      - message
+      - saved_keys
+    error_codes:
+      - invalid_payload
+      - project_context_required
+      - provider_secret_storage_unavailable
+      - provider_secret_storage_failed
+      - provider_secret_value_required
+  - action_id: verify_connection
+    workflow_visible: false
+    title: "Verify Connection"
+    description: "Confirm the saved access token and phone number ID by reading the phone number from the Graph API."
+    required_scopes:
+      - "extension:invoke"
+    handler:
+      mode: extension
+      config:
+        runtime_resources:
+          project_connection: true
+          provider_key: flowsteward.whatsapp
+          provider_secrets:
+            - access_token
+    result_fields:
+      - message
+      - result.verified
+      - result.display_phone_number
+    mutates_platform: false
+    error_codes:
+      - access_token_required
+      - phone_number_id_required
+      - access_token_rejected
+      - whatsapp_unreachable
+  - action_id: save_discovered_sender
+    workflow_visible: false
+    title: "Save Discovered Sender"
+    description: "Save a sender that wrote to this number as a normal named contact (notify on, workflow trigger off)."
+    required_scopes:
+      - "extension:invoke"
+    handler:
+      mode: extension
+      config:
+        runtime_resources:
+          project_connection: true
+        host_mutations:
+          - project_connection_upsert
+    command_type: invoke_extension_action
+    mutates_platform: true
+    parameters:
+      - name: wa_id
+        type: string
+        required: false
+      - name: channel_id
+        type: string
+        required: false
+      - name: display_name
+        type: string
+        required: false
+      - name: profile_name
+        type: string
+        required: false
+    result_fields:
+      - message
+      - values.contacts
+    error_codes:
+      - project_context_required
+      - sender_not_resolved
+      - contact_already_exists
+      - contact_id_duplicate
+      - project_connection_storage_unavailable
+  - action_id: upsert_contact
+    workflow_visible: false
+    title: "Save Contacts"
+    description: "Persist the project-scoped WhatsApp contact list."
+    required_scopes:
+      - "extension:invoke"
+    handler:
+      mode: platform
+      operation: project_connection_list_replace
+      config:
+        connection_type_id: whatsapp_cloud
+        list_key: contacts
+        item_key: channel_id
+        duplicate_error: duplicate_contact_id
+        immutable_error: immutable_contact_id
+    command_type: invoke_extension_action
+    mutates_platform: true
+    parameters:
+      - name: contacts
+        type: array
+        required: true
+    result_fields:
+      - message
+      - values.contacts
+    error_codes:
+      - project_context_required
+      - invalid_payload
+      - duplicate_contact_id
+      - immutable_contact_id
+      - project_connection_storage_unavailable
+  - action_id: toggle_contact
+    workflow_visible: false
+    title: "Toggle Contact"
+    description: "Enable or disable a WhatsApp contact."
+    required_scopes:
+      - "extension:invoke"
+    handler:
+      mode: platform
+      operation: project_connection_list_toggle
+      config:
+        connection_type_id: whatsapp_cloud
+        list_key: contacts
+        item_key: channel_id
+        toggle_field: enabled
+        not_found_error: contact_not_found
+    command_type: invoke_extension_action
+    mutates_platform: true
+    parameters:
+      - name: channel_id
+        type: string
+        required: false
+    result_fields:
+      - message
+      - values.contacts
+    error_codes:
+      - project_context_required
+      - contact_not_found
+      - project_connection_storage_unavailable
+  - action_id: delete_contact
+    workflow_visible: false
+    title: "Delete Contact"
+    description: "Delete a WhatsApp contact from the project binding."
+    required_scopes:
+      - "extension:invoke"
+    handler:
+      mode: platform
+      operation: project_connection_list_delete
+      config:
+        connection_type_id: whatsapp_cloud
+        list_key: contacts
+        item_key: channel_id
+        not_found_error: contact_not_found
+    command_type: invoke_extension_action
+    mutates_platform: true
+    parameters:
+      - name: channel_id
+        type: string
+        required: false
+    result_fields:
+      - message
+      - values.contacts
+    error_codes:
+      - project_context_required
+      - contact_not_found
+      - project_connection_storage_unavailable
+  - action_id: toggle_route
+    workflow_visible: false
+    title: "Toggle Route"
+    description: "Enable or disable a notification route."
+    required_scopes:
+      - "extension:invoke"
+    handler:
+      mode: extension
+      config:
+        runtime_resources:
+          notification_routes: true
+        host_mutations:
+          - notification_routes_save
+    command_type: invoke_extension_action
+    mutates_platform: true
+    result_fields:
+      - message
+    error_codes:
+      - project_context_required
+      - notification_route_storage_unavailable
+      - toggle_route_requires_target_item_ids
+      - no_matching_routes_found
+  - action_id: get_webhook_status
+    workflow_visible: false
+    title: "Get Webhook Status"
+    description: "Report whether the callback is registered and when the last inbound webhook arrived. WhatsApp webhooks are registered in the Meta dashboard; this makes no network call."
+    required_scopes:
+      - "extension:invoke"
+    handler:
+      mode: extension
+      config:
+        runtime_resources:
+          project_connection: true
+          callback_registrations: true
+    result_fields:
+      - result.registered
+      - result.last_inbound_at
+      - result.url_configured
+    mutates_platform: false
+    error_codes:
+      - project_context_required
+  - action_id: ingress_event
+    workflow_visible: false
+    title: "Ingress Event"
+    description: "Normalize authenticated inbound WhatsApp webhook payloads to message and status events."
+    required_scopes:
+      - "extension:invoke"
+    handler:
+      mode: extension
+      config:
+        runtime_resources:
+          project_connection: true
+          callback_registrations: true
+        host_mutations:
+          - project_connection_upsert
+    result_fields:
+      - result.provider
+      - result.ingress_type
+      - result.project_id
+    mutates_platform: false
+    error_codes:
+      - invalid_payload
+      - unauthorized_whatsapp_ingress

@@ -1,0 +1,6 @@
+version: "1"
+pages:
+  - ref: "pages/overview.yaml"
+  - ref: "pages/setup.yaml"
+  - ref: "pages/contacts.yaml"
+  - ref: "pages/deliveries.yaml"

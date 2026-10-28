@@ -1,0 +1,8 @@
+page_id: contacts
+title: Contacts
+description: "The people this number may write to, and who may start workflows. Senders that wrote to you appear here to be saved."
+components:
+  - ref: "../components/contacts_intro.yaml"
+  - ref: "../components/contacts_form.yaml"
+  - ref: "../components/discovered_senders_grid.yaml"
+  - ref: "../components/contact_test_grid.yaml"

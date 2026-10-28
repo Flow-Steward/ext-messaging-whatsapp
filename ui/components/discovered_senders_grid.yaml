@@ -1,0 +1,31 @@
+component_id: discovered_senders_grid
+type: grid
+title: "Discovered senders"
+query_id: list_discovered_senders
+columns:
+  - key: profile_name
+    label: "Profile name"
+    type: text
+  - key: wa_id
+    label: "Phone number"
+    type: text
+    monospace: true
+  - key: last_message_type
+    label: "Last message"
+    type: text
+  - key: existing_channel_id
+    label: "Saved contact"
+    type: text
+  - key: last_seen_at
+    label: "Last seen"
+    type: datetime
+row_actions:
+  - action_id: save_discovered_sender
+    label: "Save as contact"
+    scope: row
+    visible_if:
+      - path: already_saved
+        eq: false
+empty_state:
+  title: "No senders yet"
+  description: "Senders appear here after they write to this number. Incoming messages need the webhook set up on the Setup page."
