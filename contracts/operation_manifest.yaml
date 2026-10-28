@@ -1,0 +1,525 @@
+operations:
+  - operation_id: send_message
+    display_name: "Send WhatsApp message"
+    description: "Send a text message to one of this connection's WhatsApp contacts, optionally with up to 3 reply buttons. Text is at most 4096 characters, at most 1024 with buttons; a longer text is refused, never cut. Outside the 24-hour window WhatsApp refuses it: use Send template."
+    operation_kind: action
+    category: notification
+    connection_type_ids:
+      - whatsapp_cloud
+    workflow_visible: true
+    inputs:
+      - name: connection_ref
+        value_type: connection_ref
+        required: true
+      - name: channel_id
+        value_type: text
+        required: false
+        display_name: "Contact ID"
+        description: "The ID of a contact on the Contacts page. May be left empty when only one contact is enabled for notifications."
+      - name: wa_id
+        value_type: text
+        required: false
+        display_name: "Phone number"
+        description: "Alternative to the contact ID: the phone number (digits only) of a saved contact, for example the wa_id of a New WhatsApp message trigger."
+      - name: text
+        value_type: text
+        required: true
+        display_name: Message
+        description: "The text to send, at most 4096 characters (1024 with buttons). A Template step's result fits here."
+      - name: preview_url
+        value_type: boolean
+        required: false
+        display_name: "Link preview"
+        description: "Show a preview of the first URL (it must start with http:// or https://)."
+      - name: reply_to_message_id
+        value_type: text
+        required: false
+        display_name: "Reply to message ID"
+        description: "Send as a reply to this WhatsApp message ID (a wamid). Leave empty for a normal message."
+      - name: buttons
+        value_type: array
+        required: false
+        display_name: Buttons
+        description: "Up to 3 reply buttons: a list of {\"id\": \"yes\", \"title\": \"Yes\"}. A title is at most 20 characters and unique; an id is at most 256 characters and unique. With buttons the message is interactive and its text is at most 1024 characters."
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              title:
+                type: string
+    outputs:
+      - name: delivered
+        value_type: boolean
+        display_name: Delivered
+        description: "Whether WhatsApp accepted the message. Accepted is not delivered: delivery arrives as a message status."
+      - name: provider_message_id
+        value_type: text
+        display_name: "WhatsApp message ID"
+        description: "The message ID (wamid) WhatsApp returned."
+      - name: channel_id
+        value_type: text
+        display_name: "Contact ID"
+        description: "The contact the message went to."
+      - name: external_effect_status
+        value_type: text
+    result_fields:
+      - result.delivered
+      - result.provider_message_id
+      - result.channel_id
+    error_codes:
+      - text_required
+      - message_too_long
+      - message_too_long_for_buttons
+      - buttons_invalid
+      - project_connection_required
+      - no_notify_contact
+      - channel_id_required
+      - unknown_channel_id
+      - unknown_wa_id
+      - wa_id_invalid
+      - channel_disabled
+      - channel_missing_notify
+      - contact_wa_id_missing
+      - access_token_required
+      - phone_number_id_required
+      - whatsapp_window_closed
+      - whatsapp_parameter_invalid
+      - whatsapp_parameter_missing
+      - whatsapp_media_rejected
+      - whatsapp_token_invalid
+      - whatsapp_rate_limited
+      - whatsapp_undeliverable
+      - whatsapp_recipient_is_sender
+      - whatsapp_number_not_registered
+      - whatsapp_template_invalid
+      - whatsapp_account_restricted
+      - whatsapp_payment_issue
+      - whatsapp_service_unavailable
+      - whatsapp_unsupported_message_type
+      - whatsapp_media_download_failed
+      - whatsapp_request_failed
+      - whatsapp_request_rejected
+      - whatsapp_send_ambiguous
+  - operation_id: deliver_notification
+    display_name: "Deliver Notification"
+    description: "Internal notification-provider delivery contract."
+    operation_kind: action
+    category: notification
+    workflow_visible: false
+    inputs:
+      - name: event
+        value_type: object
+        required: true
+      - name: route
+        value_type: object
+        required: true
+    outputs:
+      - name: delivered
+        value_type: boolean
+      - name: provider_message_id
+        value_type: text
+  - operation_id: send_template
+    display_name: "Send WhatsApp template"
+    description: "Send an approved message template to one of this connection's WhatsApp contacts. Templates are the only messages WhatsApp allows outside the 24-hour window. Only positional body text parameters are supported."
+    operation_kind: action
+    category: notification
+    connection_type_ids:
+      - whatsapp_cloud
+    workflow_visible: true
+    inputs:
+      - name: connection_ref
+        value_type: connection_ref
+        required: true
+      - name: channel_id
+        value_type: text
+        required: false
+        display_name: "Contact ID"
+        description: "The ID of a contact on the Contacts page. May be left empty when only one contact is enabled for notifications."
+      - name: wa_id
+        value_type: text
+        required: false
+        display_name: "Phone number"
+        description: "Alternative to the contact ID: the phone number (digits only) of a saved contact, for example the wa_id of a New WhatsApp message trigger."
+      - name: template_name
+        value_type: text
+        required: true
+        display_name: "Template name"
+        description: "The name of an APPROVED message template."
+      - name: language
+        value_type: text
+        required: true
+        display_name: "Language code"
+        description: "The template's language code, for example en_US or lt."
+      - name: body_parameters
+        value_type: array
+        required: false
+        display_name: "Body parameters"
+        description: "The texts for the template body placeholders in order, for example [\"Jessica\", \"12\"]."
+        schema:
+          type: array
+          items:
+            type: string
+    outputs:
+      - name: delivered
+        value_type: boolean
+        display_name: Delivered
+        description: "Whether WhatsApp accepted the message. Accepted is not delivered: delivery arrives as a message status."
+      - name: provider_message_id
+        value_type: text
+        display_name: "WhatsApp message ID"
+        description: "The message ID (wamid) WhatsApp returned."
+      - name: channel_id
+        value_type: text
+        display_name: "Contact ID"
+        description: "The contact the message went to."
+      - name: external_effect_status
+        value_type: text
+    result_fields:
+      - result.delivered
+      - result.provider_message_id
+      - result.channel_id
+    error_codes:
+      - template_name_required
+      - language_required
+      - template_parameters_invalid
+      - project_connection_required
+      - no_notify_contact
+      - channel_id_required
+      - unknown_channel_id
+      - unknown_wa_id
+      - wa_id_invalid
+      - channel_disabled
+      - channel_missing_notify
+      - contact_wa_id_missing
+      - access_token_required
+      - phone_number_id_required
+      - whatsapp_window_closed
+      - whatsapp_parameter_invalid
+      - whatsapp_parameter_missing
+      - whatsapp_media_rejected
+      - whatsapp_token_invalid
+      - whatsapp_rate_limited
+      - whatsapp_undeliverable
+      - whatsapp_recipient_is_sender
+      - whatsapp_number_not_registered
+      - whatsapp_template_invalid
+      - whatsapp_account_restricted
+      - whatsapp_payment_issue
+      - whatsapp_service_unavailable
+      - whatsapp_unsupported_message_type
+      - whatsapp_media_download_failed
+      - whatsapp_request_failed
+      - whatsapp_request_rejected
+      - whatsapp_send_ambiguous
+  - operation_id: send_reaction
+    display_name: "Send WhatsApp reaction"
+    description: "React with an emoji to a message a contact sent you. The message must be at most 30 days old and must be one you received."
+    operation_kind: action
+    category: notification
+    connection_type_ids:
+      - whatsapp_cloud
+    workflow_visible: true
+    inputs:
+      - name: connection_ref
+        value_type: connection_ref
+        required: true
+      - name: channel_id
+        value_type: text
+        required: false
+        display_name: "Contact ID"
+        description: "The ID of a contact on the Contacts page. May be left empty when only one contact is enabled for notifications."
+      - name: wa_id
+        value_type: text
+        required: false
+        display_name: "Phone number"
+        description: "Alternative to the contact ID: the phone number (digits only) of a saved contact, for example the wa_id of a New WhatsApp message trigger."
+      - name: message_id
+        value_type: text
+        required: true
+        display_name: "Message ID"
+        description: "The ID (wamid) of the received message to react to, for example message_id of a New WhatsApp message trigger."
+      - name: emoji
+        value_type: text
+        required: true
+        display_name: Emoji
+        description: "The emoji to react with."
+    outputs:
+      - name: delivered
+        value_type: boolean
+        display_name: Delivered
+        description: "Whether WhatsApp accepted the message. Accepted is not delivered: delivery arrives as a message status."
+      - name: provider_message_id
+        value_type: text
+        display_name: "WhatsApp message ID"
+        description: "The message ID (wamid) WhatsApp returned."
+      - name: channel_id
+        value_type: text
+        display_name: "Contact ID"
+        description: "The contact the message went to."
+      - name: external_effect_status
+        value_type: text
+    result_fields:
+      - result.delivered
+      - result.provider_message_id
+      - result.channel_id
+    error_codes:
+      - message_id_required
+      - emoji_required
+      - project_connection_required
+      - no_notify_contact
+      - channel_id_required
+      - unknown_channel_id
+      - unknown_wa_id
+      - wa_id_invalid
+      - channel_disabled
+      - channel_missing_notify
+      - contact_wa_id_missing
+      - access_token_required
+      - phone_number_id_required
+      - whatsapp_window_closed
+      - whatsapp_parameter_invalid
+      - whatsapp_parameter_missing
+      - whatsapp_media_rejected
+      - whatsapp_token_invalid
+      - whatsapp_rate_limited
+      - whatsapp_undeliverable
+      - whatsapp_recipient_is_sender
+      - whatsapp_number_not_registered
+      - whatsapp_template_invalid
+      - whatsapp_account_restricted
+      - whatsapp_payment_issue
+      - whatsapp_service_unavailable
+      - whatsapp_unsupported_message_type
+      - whatsapp_media_download_failed
+      - whatsapp_request_failed
+      - whatsapp_request_rejected
+      - whatsapp_send_ambiguous
+  - operation_id: mark_as_read
+    display_name: "Mark WhatsApp message as read"
+    description: "Mark a received message as read (the sender sees blue ticks). Works within 30 days of receipt; it also marks earlier messages of the chat as read."
+    operation_kind: action
+    category: notification
+    connection_type_ids:
+      - whatsapp_cloud
+    workflow_visible: true
+    inputs:
+      - name: connection_ref
+        value_type: connection_ref
+        required: true
+      - name: message_id
+        value_type: text
+        required: true
+        display_name: "Message ID"
+        description: "The ID (wamid) of the received message, for example message_id of a New WhatsApp message trigger."
+    outputs:
+      - name: marked_read
+        value_type: boolean
+        display_name: "Marked as read"
+        description: "Whether WhatsApp confirmed the read mark."
+      - name: message_id
+        value_type: text
+        display_name: "Message ID"
+        description: "The message that was marked."
+      - name: external_effect_status
+        value_type: text
+    result_fields:
+      - result.marked_read
+      - result.message_id
+    error_codes:
+      - message_id_required
+      - project_connection_required
+      - access_token_required
+      - phone_number_id_required
+      - whatsapp_window_closed
+      - whatsapp_parameter_invalid
+      - whatsapp_parameter_missing
+      - whatsapp_media_rejected
+      - whatsapp_token_invalid
+      - whatsapp_rate_limited
+      - whatsapp_undeliverable
+      - whatsapp_recipient_is_sender
+      - whatsapp_number_not_registered
+      - whatsapp_template_invalid
+      - whatsapp_account_restricted
+      - whatsapp_payment_issue
+      - whatsapp_service_unavailable
+      - whatsapp_unsupported_message_type
+      - whatsapp_media_download_failed
+      - whatsapp_request_failed
+      - whatsapp_request_rejected
+      - whatsapp_send_ambiguous
+  - operation_id: send_file
+    display_name: "Send WhatsApp file"
+    description: "Send a file from the workflow to one of this connection's WhatsApp contacts as an image, document, audio or video. Limits: image 5 MB (jpeg, png), document 100 MB (txt, xls, xlsx, doc, docx, ppt, pptx, pdf), audio 16 MB, video 16 MB (3gp, mp4). A larger file is refused, never cut."
+    operation_kind: action
+    category: notification
+    connection_type_ids:
+      - whatsapp_cloud
+    workflow_visible: true
+    inputs:
+      - name: connection_ref
+        value_type: connection_ref
+        required: true
+      - name: channel_id
+        value_type: text
+        required: false
+        display_name: "Contact ID"
+        description: "The ID of a contact on the Contacts page. May be left empty when only one contact is enabled for notifications."
+      - name: wa_id
+        value_type: text
+        required: false
+        display_name: "Phone number"
+        description: "Alternative to the contact ID: the phone number (digits only) of a saved contact, for example the wa_id of a New WhatsApp message trigger."
+      - name: kind
+        value_type: text
+        required: true
+        display_name: Kind
+        description: "How WhatsApp shows the file: image, document, audio or video."
+      - name: artifact_handle
+        value_type: artifact_handle
+        required: true
+        display_name: File
+        description: "The file (an artifact) to send, for example one a Fetch File or Get WhatsApp file step produced."
+      - name: caption
+        value_type: text
+        required: false
+        display_name: Caption
+        description: "Optional text under an image, video or document, at most 1024 characters. Audio has no caption."
+      - name: file_name
+        value_type: text
+        required: false
+        display_name: "File name"
+        description: "The name WhatsApp shows for a document. Defaults to the artifact's name; include the extension."
+      - name: mime_type
+        value_type: text
+        required: false
+        display_name: "MIME type"
+        description: "Override the file's MIME type, for example application/pdf. Defaults to the artifact's type or its file extension."
+      - name: reply_to_message_id
+        value_type: text
+        required: false
+        display_name: "Reply to message ID"
+        description: "Send as a reply to this WhatsApp message ID (a wamid)."
+    outputs:
+      - name: delivered
+        value_type: boolean
+        display_name: Delivered
+        description: "Whether WhatsApp accepted the message. Accepted is not delivered: delivery arrives as a message status."
+      - name: provider_message_id
+        value_type: text
+        display_name: "WhatsApp message ID"
+        description: "The message ID (wamid) WhatsApp returned."
+      - name: channel_id
+        value_type: text
+        display_name: "Contact ID"
+        description: "The contact the message went to."
+      - name: external_effect_status
+        value_type: text
+    result_fields:
+      - result.delivered
+      - result.provider_message_id
+      - result.channel_id
+    error_codes:
+      - kind_invalid
+      - artifact_required
+      - caption_too_long
+      - caption_not_supported
+      - file_too_large
+      - artifact_read_failed
+      - artifact_empty
+      - mime_type_unsupported
+      - project_connection_required
+      - no_notify_contact
+      - channel_id_required
+      - unknown_channel_id
+      - unknown_wa_id
+      - wa_id_invalid
+      - channel_disabled
+      - channel_missing_notify
+      - contact_wa_id_missing
+      - access_token_required
+      - phone_number_id_required
+      - whatsapp_window_closed
+      - whatsapp_parameter_invalid
+      - whatsapp_parameter_missing
+      - whatsapp_media_rejected
+      - whatsapp_token_invalid
+      - whatsapp_rate_limited
+      - whatsapp_undeliverable
+      - whatsapp_recipient_is_sender
+      - whatsapp_number_not_registered
+      - whatsapp_template_invalid
+      - whatsapp_account_restricted
+      - whatsapp_payment_issue
+      - whatsapp_service_unavailable
+      - whatsapp_unsupported_message_type
+      - whatsapp_media_download_failed
+      - whatsapp_request_failed
+      - whatsapp_request_rejected
+      - whatsapp_send_ambiguous
+  - operation_id: get_file
+    display_name: "Get WhatsApp file"
+    description: "Download a received file, by its WhatsApp media ID, into a workflow artifact. The download link lives 5 minutes and media IDs from webhooks are kept 7 days, so run the step soon after the message arrives. A file over 100 MB is refused, never cut."
+    operation_kind: source
+    category: notification
+    connection_type_ids:
+      - whatsapp_cloud
+    workflow_visible: true
+    inputs:
+      - name: connection_ref
+        value_type: connection_ref
+        required: true
+      - name: file_id
+        value_type: text
+        required: true
+        display_name: "Media ID"
+        description: "The file_id of a New WhatsApp message trigger (the WhatsApp media ID)."
+      - name: file_name
+        value_type: text
+        required: false
+        display_name: "File name"
+        description: "Optional name for the artifact. Defaults to whatsapp_<media id> with an extension from the file type."
+    outputs:
+      - name: artifact_handle
+        value_type: artifact_handle
+        display_name: File
+        description: "The downloaded file as a workflow artifact."
+      - name: artifact_filename
+        value_type: text
+        display_name: "File name"
+        description: "The name given to the file."
+      - name: mime_type
+        value_type: text
+        display_name: "MIME type"
+        description: "The file's MIME type."
+      - name: size_bytes
+        value_type: integer
+        display_name: "Size in bytes"
+        description: "The size of the downloaded file."
+      - name: sha256
+        value_type: text
+        display_name: SHA-256
+        description: "The checksum of the downloaded file."
+    result_fields:
+      - result.artifact_handle
+      - result.artifact_filename
+      - result.mime_type
+      - result.size_bytes
+      - result.sha256
+    error_codes:
+      - file_id_required
+      - project_connection_required
+      - access_token_required
+      - file_too_large
+      - artifact_write_failed
+      - whatsapp_media_not_found
+      - whatsapp_media_url_rejected
+      - whatsapp_download_failed
+      - whatsapp_token_invalid
+      - whatsapp_rate_limited
+      - whatsapp_request_failed
+      - whatsapp_request_rejected
+      - whatsapp_send_ambiguous

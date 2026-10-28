@@ -1,0 +1,20 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: WhatsApp Connection Configuration
+description: Non-secret configuration for the WhatsApp Business Cloud API binding.
+type: object
+properties:
+  phone_number_id:
+    type: string
+    description: ID of the WhatsApp Business phone number messages are sent from.
+    maxLength: 64
+  waba_id:
+    type: string
+    description: Optional WhatsApp Business Account ID.
+    maxLength: 64
+  graph_api_version:
+    type: string
+    description: Graph API version used for every call.
+    pattern: '^v[0-9]+\.[0-9]+$'
+    default: v26.0
+required: []
+additionalProperties: true

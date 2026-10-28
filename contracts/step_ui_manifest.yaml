@@ -1,0 +1,166 @@
+forms:
+  - operation_id: send_message
+    title: "Send WhatsApp message"
+    fields:
+      - name: channel_id
+        label: "Contact ID"
+        widget_type: text
+        required: false
+        help_text: "The ID of a contact on the Contacts page. May be left empty when only one contact is enabled for notifications."
+        placeholder: alerts
+      - name: wa_id
+        label: "Phone number"
+        widget_type: text
+        required: false
+        help_text: "Alternative to the contact ID: the phone number (digits only) of a saved contact, for example the wa_id of a New WhatsApp message trigger."
+        placeholder: "37060000000"
+      - name: text
+        label: Message
+        widget_type: textarea
+        required: true
+        help_text: "The text to send, at most 4096 characters (1024 with buttons). A Template step's result fits here."
+      - name: preview_url
+        label: "Link preview"
+        widget_type: boolean
+        required: false
+        help_text: "Show a preview of the first URL (it must start with http:// or https://)."
+      - name: reply_to_message_id
+        label: "Reply to message ID"
+        widget_type: text
+        required: false
+        help_text: "Send as a reply to this WhatsApp message ID (a wamid). Leave empty for a normal message."
+      - name: buttons
+        label: Buttons
+        widget_type: json
+        required: false
+        help_text: "Up to 3 reply buttons: a list of {\"id\": \"yes\", \"title\": \"Yes\"}. A title is at most 20 characters and unique; an id is at most 256 characters and unique. With buttons the message is interactive and its text is at most 1024 characters."
+  - operation_id: send_template
+    title: "Send WhatsApp template"
+    fields:
+      - name: channel_id
+        label: "Contact ID"
+        widget_type: text
+        required: false
+        help_text: "The ID of a contact on the Contacts page. May be left empty when only one contact is enabled for notifications."
+        placeholder: alerts
+      - name: wa_id
+        label: "Phone number"
+        widget_type: text
+        required: false
+        help_text: "Alternative to the contact ID: the phone number (digits only) of a saved contact, for example the wa_id of a New WhatsApp message trigger."
+        placeholder: "37060000000"
+      - name: template_name
+        label: "Template name"
+        widget_type: text
+        required: true
+        help_text: "The name of an APPROVED message template."
+      - name: language
+        label: "Language code"
+        widget_type: text
+        required: true
+        help_text: "The template's language code, for example en_US or lt."
+      - name: body_parameters
+        label: "Body parameters"
+        widget_type: json
+        required: false
+        help_text: "The texts for the template body placeholders in order, for example [\"Jessica\", \"12\"]."
+  - operation_id: send_reaction
+    title: "Send WhatsApp reaction"
+    fields:
+      - name: channel_id
+        label: "Contact ID"
+        widget_type: text
+        required: false
+        help_text: "The ID of a contact on the Contacts page. May be left empty when only one contact is enabled for notifications."
+        placeholder: alerts
+      - name: wa_id
+        label: "Phone number"
+        widget_type: text
+        required: false
+        help_text: "Alternative to the contact ID: the phone number (digits only) of a saved contact, for example the wa_id of a New WhatsApp message trigger."
+        placeholder: "37060000000"
+      - name: message_id
+        label: "Message ID"
+        widget_type: text
+        required: true
+        help_text: "The ID (wamid) of the received message to react to, for example message_id of a New WhatsApp message trigger."
+      - name: emoji
+        label: Emoji
+        widget_type: text
+        required: true
+        help_text: "The emoji to react with."
+  - operation_id: mark_as_read
+    title: "Mark WhatsApp message as read"
+    fields:
+      - name: message_id
+        label: "Message ID"
+        widget_type: text
+        required: true
+        help_text: "The ID (wamid) of the received message, for example message_id of a New WhatsApp message trigger."
+  - operation_id: send_file
+    title: "Send WhatsApp file"
+    fields:
+      - name: channel_id
+        label: "Contact ID"
+        widget_type: text
+        required: false
+        help_text: "The ID of a contact on the Contacts page. May be left empty when only one contact is enabled for notifications."
+        placeholder: alerts
+      - name: wa_id
+        label: "Phone number"
+        widget_type: text
+        required: false
+        help_text: "Alternative to the contact ID: the phone number (digits only) of a saved contact, for example the wa_id of a New WhatsApp message trigger."
+        placeholder: "37060000000"
+      - name: kind
+        label: Kind
+        widget_type: select
+        required: true
+        help_text: "How WhatsApp shows the file: image, document, audio or video."
+        options:
+          - label: Image
+            value: image
+          - label: Document
+            value: document
+          - label: Audio
+            value: audio
+          - label: Video
+            value: video
+      - name: artifact_handle
+        label: File
+        widget_type: artifact_picker
+        required: true
+        help_text: "The file (an artifact) to send, for example one a Fetch File or Get WhatsApp file step produced."
+      - name: caption
+        label: Caption
+        widget_type: textarea
+        required: false
+        help_text: "Optional text under an image, video or document, at most 1024 characters. Audio has no caption."
+      - name: file_name
+        label: "File name"
+        widget_type: text
+        required: false
+        help_text: "The name WhatsApp shows for a document. Defaults to the artifact's name; include the extension."
+      - name: mime_type
+        label: "MIME type"
+        widget_type: text
+        required: false
+        help_text: "Override the file's MIME type, for example application/pdf. Defaults to the artifact's type or its file extension."
+      - name: reply_to_message_id
+        label: "Reply to message ID"
+        widget_type: text
+        required: false
+        help_text: "Send as a reply to this WhatsApp message ID (a wamid)."
+  - operation_id: get_file
+    title: "Get WhatsApp file"
+    fields:
+      - name: file_id
+        label: "Media ID"
+        widget_type: text
+        required: true
+        help_text: "The file_id of a New WhatsApp message trigger (the WhatsApp media ID)."
+      - name: file_name
+        label: "File name"
+        widget_type: text
+        required: false
+        help_text: "Optional name for the artifact. Defaults to whatsapp_<media id> with an extension from the file type."

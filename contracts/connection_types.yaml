@@ -1,0 +1,80 @@
+connection_types:
+  - connection_type_id: whatsapp_cloud
+    display_name: "WhatsApp Business"
+    description: "A project-scoped WhatsApp Business Cloud API phone number with named contacts for notifications and workflow triggers."
+    auth:
+      type: static_secret
+    config_schema:
+      type: object
+      additionalProperties: false
+      properties:
+        phone_number_id:
+          type: string
+          maxLength: 64
+          default: ""
+        waba_id:
+          type: string
+          maxLength: 64
+          default: ""
+        graph_api_version:
+          type: string
+          pattern: "^v[0-9]+\\.[0-9]+$"
+          default: v26.0
+        contacts:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required:
+              - channel_id
+              - display_name
+              - wa_id
+              - enabled
+              - capabilities
+            properties:
+              channel_id:
+                type: string
+                minLength: 1
+                maxLength: 190
+              display_name:
+                type: string
+                minLength: 1
+                maxLength: 512
+              wa_id:
+                type: string
+                pattern: "^[0-9]{7,15}$"
+              enabled:
+                type: boolean
+              capabilities:
+                type: object
+                additionalProperties: false
+                required:
+                  - notify
+                properties:
+                  notify:
+                    type: boolean
+                  workflow_trigger:
+                    type: boolean
+                    default: false
+    ingress_schema:
+      type: object
+      additionalProperties: true
+    secret_schema:
+      type: object
+      additionalProperties: false
+      required:
+        - access_token
+      properties:
+        access_token:
+          type: string
+          minLength: 1
+          maxLength: 4096
+        app_secret:
+          type: string
+          minLength: 1
+          maxLength: 4096
+    capabilities:
+      notifications: true
+      human_decisions: false
+      webhook_ingress: true
+      polling_ingress: false
