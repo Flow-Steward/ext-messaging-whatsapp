@@ -277,6 +277,21 @@ def test_a_message_to_another_phone_number_is_ignored():
     assert result["result"]["other_number"] == 1
 
 
+def test_a_connection_without_its_phone_number_id_takes_no_messages():
+    req = request(envelope(messages=[message("text", {"body": "x"})]))
+    req["provider"]["provider_config"]["phone_number_id"] = ""
+    result = main_ingress._ingress_event_response(req)
+    assert result["events"] == []
+    assert result["result"]["other_number"] == 1
+
+
+def test_a_delivery_without_a_destination_number_is_ignored():
+    payload = envelope(messages=[message("text", {"body": "x"})], phone_number_id="")
+    result = main_ingress._ingress_event_response(request(payload))
+    assert result["events"] == []
+    assert result["result"]["other_number"] == 1
+
+
 def test_unauthenticated_requests_are_refused():
     result = main_ingress._ingress_event_response(
         request(envelope(messages=[message("text", {"body": "x"})]), authenticated=False)
