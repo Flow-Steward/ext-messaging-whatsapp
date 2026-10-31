@@ -255,7 +255,9 @@ def _ingress_event_response(request_payload: dict[str, Any]) -> dict[str, Any]:
                 continue
             value = _as_dict(change_payload.get("value"))
             number = _as_str(_as_dict(value.get("metadata")).get("phone_number_id"))
-            if configured_number and number and number != configured_number:
+            # Fail closed: a connection without its phone number id is not bound to a
+            # business number, so it must not take messages addressed to any number.
+            if not configured_number or number != configured_number:
                 counts["other_number"] += 1
                 continue
             profiles = {

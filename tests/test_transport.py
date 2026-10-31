@@ -188,6 +188,27 @@ def test_download_refuses_a_foreign_host_without_a_request(graph):
     assert graph.requests == []
 
 
+def test_download_follows_a_redirect_only_to_a_meta_media_host(graph):
+    graph.reply(302, b"", {"location": "https://scontent.xx.fbcdn.net/v/media.jpg"})
+    graph.reply(200, b"BYTES", {"content-type": "image/jpeg"})
+    response = t.download_media(TOKEN, MEDIA_URL, max_bytes=100)
+    assert response["ok"] is True
+    assert graph.requests[1]["url"] == "https://scontent.xx.fbcdn.net/v/media.jpg"
+
+
+def test_download_refuses_a_redirect_off_meta_and_keeps_the_token_home(graph):
+    graph.reply(302, b"", {"location": "http://collector.example.invalid/steal"})
+    response = t.download_media(TOKEN, MEDIA_URL, max_bytes=100)
+    assert response["error_code"] == "whatsapp_media_url_rejected"
+    assert len(graph.requests) == 1
+
+
+def test_urllib_does_not_follow_redirects_itself():
+    assert t._NO_REDIRECT_OPENER.handle_open  # built with the no-redirect handler
+    handler = t._NoRedirect()
+    assert handler.redirect_request(None, None, 302, "Found", {}, "http://x.invalid/") is None
+
+
 def test_download_404_says_the_link_expired(graph):
     graph.reply(404, b"")
     response = t.download_media(TOKEN, MEDIA_URL, max_bytes=100)

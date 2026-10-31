@@ -52,6 +52,22 @@ class ResponseTooLarge(Exception):
     """The answer passed the byte limit; nothing is truncated, the call fails."""
 
 
+class _NoRedirect(urlrequest.HTTPRedirectHandler):
+    """Return a redirect as its 3xx status instead of following it.
+
+    urllib would follow it to any host, over http too, and keep the Authorization
+    header; the caller decides whether the new location may get the token.
+    """
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: ANN001
+        return None
+
+
+_NO_REDIRECT_OPENER = urlrequest.build_opener(_NoRedirect)
+_REDIRECT_STATUSES = frozenset({301, 302, 303, 307, 308})
+MAX_MEDIA_REDIRECTS = 3
+
+
 def _http_exchange(
     method: str,
     url: str,
@@ -70,7 +86,7 @@ def _http_exchange(
         raise ValueError("Only https URLs are allowed")
     request = urlrequest.Request(url, data=body, headers=headers, method=method)
     try:
-        with urlrequest.urlopen(request, timeout=timeout) as response:  # nosec B310 - https only, host checked by the caller
+        with _NO_REDIRECT_OPENER.open(request, timeout=timeout) as response:  # nosec B310 - https only, host checked by the caller
             status = int(getattr(response, "status", 200) or 200)
             response_headers = {k.lower(): v for k, v in response.headers.items()}
             data = response.read(max_bytes + 1)
@@ -486,14 +502,32 @@ def download_media(token: str, url: str, *, max_bytes: int) -> dict[str, Any]:
             definite=True,
         )
     try:
-        status, headers, raw = _http_exchange(
-            "GET",
-            url,
-            headers={"Authorization": f"Bearer {token}", "Accept": "*/*"},
-            body=None,
-            timeout=DOWNLOAD_TIMEOUT_SECONDS,
-            max_bytes=max_bytes,
-        )
+        for _ in range(MAX_MEDIA_REDIRECTS + 1):
+            status, headers, raw = _http_exchange(
+                "GET",
+                url,
+                headers={"Authorization": f"Bearer {token}", "Accept": "*/*"},
+                body=None,
+                timeout=DOWNLOAD_TIMEOUT_SECONDS,
+                max_bytes=max_bytes,
+            )
+            if status not in _REDIRECT_STATUSES:
+                break
+            # A redirect gets the same check as the first URL before the token follows.
+            url = parse.urljoin(url, _as_str(headers.get("location")))
+            if not media_url_allowed(url):
+                return _failure(
+                    "whatsapp_media_url_rejected",
+                    "WhatsApp redirected the download to an unexpected host; it was not "
+                    "requested.",
+                    definite=True,
+                )
+        else:
+            return _failure(
+                "whatsapp_download_failed",
+                "WhatsApp redirected the download too many times.",
+                definite=True,
+            )
     except ResponseTooLarge:
         return _failure(
             "file_too_large",
