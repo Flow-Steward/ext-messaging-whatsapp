@@ -2,7 +2,7 @@ manifest_version: 2
 lifecycle: {data_schema_version: 1, data_migrations: []}
 extension_id: flowsteward.whatsapp
 kind: notification_provider
-version: 0.1.0
+version: 0.1.1
 display_name: WhatsApp
 description: Sends WhatsApp messages, templates, reactions and files through the WhatsApp Business Cloud API
   and starts workflows from incoming messages and delivery statuses.

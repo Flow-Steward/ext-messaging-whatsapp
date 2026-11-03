@@ -1,6 +1,6 @@
 # WhatsApp for Flow Steward
 
-`flowsteward.whatsapp` 0.1.0 connects a Flow Steward project to the **WhatsApp Business Cloud API**
+`flowsteward.whatsapp` 0.1.1 connects a Flow Steward project to the **WhatsApp Business Cloud API**
 (Meta). It sends messages, templates, reactions and files from workflows, delivers project
 notifications, and starts workflows from incoming messages and delivery statuses.
 
@@ -87,3 +87,7 @@ incoming messages). Secrets are stored by the platform, never in config, and nev
 `button_title`, location fields, `timestamp`, `phone_number_id`, `dedupe_key`, `project_id`, `connection_id`.
 `message_status`: `status`, `message_id`, `wa_id`, `timestamp`, `error_code` / `error_title` for a failure.
 Media IDs received in webhooks are kept for 7 days; download links live 5 minutes.
+
+## Logo
+
+Logo: `icon.png` (the official green WhatsApp mark; PNG, 512x512). See [BRANDING.md](BRANDING.md) for source and attribution.
