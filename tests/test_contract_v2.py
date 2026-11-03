@@ -114,7 +114,7 @@ def test_identity_and_egress() -> None:
     manifest = _load("extension.yaml")
     assert manifest["extension_id"] == "flowsteward.whatsapp"
     assert manifest["display_name"] == "WhatsApp"
-    assert manifest["version"] == "0.1.0"
+    assert manifest["version"] == "0.1.1"
     assert manifest["kind"] == "notification_provider"
     assert "graph.facebook.com" in manifest["egress"]["hosts"]
     grants = manifest["runtime_grants"]["mutations"]["project_connection_secrets_save"]
