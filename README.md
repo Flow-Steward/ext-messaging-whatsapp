@@ -1,8 +1,10 @@
 # WhatsApp for Flow Steward
 
-`flowsteward.whatsapp` 0.1.1 connects a Flow Steward project to the **WhatsApp Business Cloud API**
-(Meta). It sends messages, templates, reactions and files from workflows, delivers project
-notifications, and starts workflows from incoming messages and delivery statuses.
+WhatsApp connects Flow Steward workflows to Meta's WhatsApp Business Cloud API. Send text messages, approved templates, emoji reactions and supported files, mark received messages as read, or download incoming media for later workflow steps. Text messages can include replies, link previews and up to three reply buttons. Project notifications can also be delivered to enabled contacts.
+
+Use it for customer updates, document exchange and message-driven intake. Incoming messages from saved, enabled contacts can start workflows with their text, file metadata or button responses. A separate message-status trigger lets workflows react when a message is sent, delivered, read or fails, supporting follow-up actions around the conversation.
+
+Setup requires a Meta app with WhatsApp, a business phone number ID and an access token. Incoming events also need the app secret, a public HTTPS callback and a compatible Flow Steward host. Recipients must opt in. Free-form messaging uses the 24-hour customer-service window; use an approved template outside it. The extension supports individual contacts, without groups or Flow Steward approval decisions. Templates accept positional body-text parameters; sent-message editing, deletion and pinning are unavailable.
 
 ## What it does
 
