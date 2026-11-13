@@ -265,7 +265,7 @@ actions:
       - name: artifact_handle
         type: string
         required: true
-        description: "The file (an artifact) to send, for example one a Fetch File or Get WhatsApp file step produced."
+        description: "The file (an artifact) to send, for example one a Download remote file or Download WhatsApp file step produced."
       - name: caption
         type: string
         required: false

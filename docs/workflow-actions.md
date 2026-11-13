@@ -65,7 +65,7 @@ Inputs:
 - `channel_id`: The ID of a contact on the Contacts page. May be left empty when only one contact is enabled for notifications.
 - `wa_id`: Alternative to the contact ID: the phone number (digits only) of a saved contact, for example the wa_id of a New WhatsApp message trigger.
 - `kind`: How WhatsApp shows the file: image, document, audio or video.
-- `artifact_handle`: The file (an artifact) to send, for example one a Fetch File or Get WhatsApp file step produced.
+- `artifact_handle`: The file (an artifact) to send, for example one a Download remote file or Download WhatsApp file step produced.
 - `caption`: Optional text under an image, video or document, at most 1024 characters. Audio has no caption.
 - `file_name`: The name WhatsApp shows for a document. Defaults to the artifact's name; include the extension.
 - `mime_type`: Override the file's MIME type, for example application/pdf. Defaults to the artifact's type or its file extension.
