@@ -93,3 +93,7 @@ Media IDs received in webhooks are kept for 7 days; download links live 5 minute
 ## Logo
 
 Logo: `icon.png` (the official green WhatsApp mark; PNG, 512x512). See [BRANDING.md](BRANDING.md) for source and attribution.
+
+## Workflow action guide
+
+See [Workflow actions](docs/workflow-actions.md) for connection setup, input formats, results and practical examples.

@@ -2,7 +2,7 @@ actions:
   - action_id: send_message
     workflow_visible: true
     title: "Send WhatsApp message"
-    description: "Send a text message to one of this connection's WhatsApp contacts, optionally with up to 3 reply buttons. Text is at most 4096 characters, at most 1024 with buttons; a longer text is refused, never cut. Outside the 24-hour window WhatsApp refuses it: use Send template."
+    description: "Send a text message to one of this connection's WhatsApp contacts, optionally with up to 3 reply buttons. Text is at most 4096 characters, at most 1024 with buttons; a longer text is refused, never cut. Outside the 24-hour window WhatsApp refuses it: use Send template. Create a WhatsApp Business Cloud API project connection with its access token and phone number ID, then add and enable the recipient on Contacts. Example: Send a processing confirmation to a saved contact during the active 24-hour messaging window."
     required_scopes:
       - "extension:invoke"
     handler:
@@ -74,7 +74,7 @@ actions:
   - action_id: send_template
     workflow_visible: true
     title: "Send WhatsApp template"
-    description: "Send an approved message template to one of this connection's WhatsApp contacts. Templates are the only messages WhatsApp allows outside the 24-hour window. Only positional body text parameters are supported."
+    description: "Send an approved message template to one of this connection's WhatsApp contacts. Templates are the only messages WhatsApp allows outside the 24-hour window. Only positional body text parameters are supported. Create a WhatsApp Business Cloud API project connection with its access token and phone number ID, then add and enable the recipient on Contacts. Example: Send an approved order_update template with body_parameters=[\"A-100\",\"shipped\"] outside the 24-hour messaging window."
     required_scopes:
       - "extension:invoke"
     handler:
@@ -141,7 +141,7 @@ actions:
   - action_id: send_reaction
     workflow_visible: true
     title: "Send WhatsApp reaction"
-    description: "React with an emoji to a message a contact sent you. The message must be at most 30 days old and must be one you received."
+    description: "React with an emoji to a message a contact sent you. The message must be at most 30 days old and must be one you received. Create a WhatsApp Business Cloud API project connection with its access token and phone number ID, then add and enable the recipient on Contacts. Example: Acknowledge an incoming message with a checkmark emoji using the trigger's message_id."
     required_scopes:
       - "extension:invoke"
     handler:
@@ -203,7 +203,7 @@ actions:
   - action_id: mark_as_read
     workflow_visible: true
     title: "Mark WhatsApp message as read"
-    description: "Mark a received message as read (the sender sees blue ticks). Works within 30 days of receipt; it also marks earlier messages of the chat as read."
+    description: "Mark a received message as read (the sender sees blue ticks). Works within 30 days of receipt; it also marks earlier messages of the chat as read. Create a WhatsApp Business Cloud API project connection with its access token and phone number ID, then add and enable the recipient on Contacts. Example: Mark an incoming customer message as read after the intake workflow records it."
     required_scopes:
       - "extension:invoke"
     handler:
@@ -243,7 +243,7 @@ actions:
   - action_id: send_file
     workflow_visible: true
     title: "Send WhatsApp file"
-    description: "Send a file from the workflow to one of this connection's WhatsApp contacts as an image, document, audio or video. Limits: image 5 MB (jpeg, png), document 100 MB (txt, xls, xlsx, doc, docx, ppt, pptx, pdf), audio 16 MB, video 16 MB (3gp, mp4). A larger file is refused, never cut."
+    description: "Send a file from the workflow to one of this connection's WhatsApp contacts as an image, document, audio or video. Limits: image 5 MB (jpeg, png), document 100 MB (txt, xls, xlsx, doc, docx, ppt, pptx, pdf), audio 16 MB, video 16 MB (3gp, mp4). A larger file is refused, never cut. Create a WhatsApp Business Cloud API project connection with its access token and phone number ID, then add and enable the recipient on Contacts. Example: Send a generated invoice PDF artifact as kind=document to a saved contact."
     required_scopes:
       - "extension:invoke"
     handler:
@@ -326,8 +326,8 @@ actions:
       - whatsapp_send_ambiguous
   - action_id: get_file
     workflow_visible: true
-    title: "Get WhatsApp file"
-    description: "Download a received file, by its WhatsApp media ID, into a workflow artifact. The download link lives 5 minutes and media IDs from webhooks are kept 7 days, so run the step soon after the message arrives. A file over 100 MB is refused, never cut."
+    title: "Download WhatsApp file"
+    description: "Download a received file, by its WhatsApp media ID, into a workflow artifact. The download link lives 5 minutes and media IDs from webhooks are kept 7 days, so run the step soon after the message arrives. A file over 100 MB is refused, never cut. Create a WhatsApp Business Cloud API project connection with its access token and phone number ID, then add and enable the recipient on Contacts. Example: Download the file_id from a New WhatsApp message trigger and pass the artifact to extraction."
     required_scopes:
       - "extension:invoke"
       - "artifact:write"

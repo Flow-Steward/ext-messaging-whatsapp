@@ -2,7 +2,7 @@ manifest_version: 2
 lifecycle: {data_schema_version: 1, data_migrations: []}
 extension_id: flowsteward.whatsapp
 kind: notification_provider
-version: 0.1.2
+version: 0.1.3
 display_name: WhatsApp
 description: |-
   WhatsApp connects Flow Steward workflows to Meta's WhatsApp Business Cloud API. Send text messages, approved templates, emoji reactions and supported files, mark received messages as read, or download incoming media for later workflow steps. Text messages can include replies, link previews and up to three reply buttons. Project notifications can also be delivered to enabled contacts.

@@ -152,7 +152,7 @@ forms:
         required: false
         help_text: "Send as a reply to this WhatsApp message ID (a wamid)."
   - operation_id: get_file
-    title: "Get WhatsApp file"
+    title: "Download WhatsApp file"
     fields:
       - name: file_id
         label: "Media ID"
