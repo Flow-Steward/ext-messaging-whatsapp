@@ -22,7 +22,7 @@ def page_components(page_id: str) -> list[dict]:
 def test_ui_is_four_pages_in_setup_order_without_inbound_mode_or_polling():
     manifest = load(UI / "ui_manifest.yaml")
     ids = [load(UI / item["ref"])["page_id"] for item in manifest["pages"]]
-    assert ids == ["overview", "setup", "contacts", "deliveries"]
+    assert ids == ["overview", "setup", "contacts", "deliveries", "support"]
     for stale in (
         "inbound_mode_form",
         "inbound_status_grid",

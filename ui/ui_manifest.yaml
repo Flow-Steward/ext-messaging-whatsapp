@@ -4,3 +4,4 @@ pages:
   - ref: "pages/setup.yaml"
   - ref: "pages/contacts.yaml"
   - ref: "pages/deliveries.yaml"
+  - ref: "pages/support.yaml"
